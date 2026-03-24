@@ -59,7 +59,7 @@ export default function AIChatbot({ user, language }) {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/chatbot', { question });
+      const res = await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/chatbot', { question });
       setMessages(prev => [...prev, { role: 'assistant', text: res.data.answer }]);
     } catch (err) {
       setMessages(prev => [...prev, {

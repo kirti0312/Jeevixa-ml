@@ -49,7 +49,7 @@ export default function StaffSchedule({ language }) {
 
   const fetchStaff = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/staff');
+      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/staff');
       setStaff(res.data);
     } catch (err) {
       console.error(err);
@@ -62,7 +62,7 @@ export default function StaffSchedule({ language }) {
     if (!form.name || !form.department || !form.phone) return;
     setAdding(true);
     try {
-      await axios.post('http://localhost:5000/api/staff/add', {
+      await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/staff/add', {
         ...form, hoursOnDuty: 0,
         isOnDuty: true, fatigueAlert: false,
       });

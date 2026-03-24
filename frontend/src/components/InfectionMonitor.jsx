@@ -45,7 +45,7 @@ export default function InfectionMonitor({ language }) {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/infection');
+      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/infection');
       setWards(res.data);
     } catch (err) {
       console.error(err);

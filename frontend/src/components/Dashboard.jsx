@@ -38,12 +38,12 @@ export default function Dashboard({ user, language }) {
   const fetchAll = async () => {
     try {
       const [wardsRes, patientsRes, staffRes, alertsRes, surgeRes, greenRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/infection'),
-        axios.get('http://localhost:5000/api/patients'),
-        axios.get('http://localhost:5000/api/staff'),
-        axios.get('http://localhost:5000/api/alerts'),
-        axios.get('http://localhost:5000/api/surge'),
-        axios.get('http://localhost:5000/api/green'),
+        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/infection'),
+        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/patients'),
+        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/staff'),
+        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/alerts'),
+        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/surge'),
+        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/green'),
       ]);
       setWards(wardsRes.data);
       setPatients(patientsRes.data.slice(0, 5));

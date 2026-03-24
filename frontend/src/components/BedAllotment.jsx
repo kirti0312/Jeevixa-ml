@@ -44,7 +44,7 @@ export default function BedAllotment({ language }) {
 
   const fetchBeds = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/beds');
+      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/beds');
       setBeds(res.data);
     } catch (err) { console.error(err); }
   };
@@ -70,7 +70,7 @@ export default function BedAllotment({ language }) {
     setResult(null);
     try {
       // First assign bed
-const bedRes = await axios.post('http://localhost:5000/api/beds/allot', {
+const bedRes = await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/beds/allot', {
   patientName: form.name,
   condition: form.condition,
   severity: form.severity,
@@ -78,7 +78,7 @@ const bedRes = await axios.post('http://localhost:5000/api/beds/allot', {
 });
 
 // Then register patient with bed info
-await axios.post('http://localhost:5000/api/patients/register', {
+await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/patients/register', {
   ...form,
   age: parseInt(form.age),
   department: bedRes.data.assignedBed?.department || 'General',

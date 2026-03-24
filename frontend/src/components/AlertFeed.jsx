@@ -34,7 +34,7 @@ export default function AlertFeed({ language }) {
 
   const fetchAlerts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/alerts');
+      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/alerts');
       setAlerts(res.data);
     } catch (err) {
       console.error(err);
@@ -45,7 +45,7 @@ export default function AlertFeed({ language }) {
 
   const markAllRead = async () => {
     try {
-      await axios.put('http://localhost:5000/api/alerts/read-all');
+      await axios.put('https://jeevixa-backend-nm1z.onrender.com/api/alerts/read-all');
       fetchAlerts();
     } catch (err) {
       console.error(err);
@@ -54,7 +54,7 @@ export default function AlertFeed({ language }) {
 
   const resolveAlert = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/alerts/${id}/resolve`, {
+      await axios.put(`https://jeevixa-backend-nm1z.onrender.com/api/alerts/${id}/resolve`, {
         resolvedBy: 'Admin'
       });
       fetchAlerts();

@@ -46,7 +46,7 @@ useEffect(() => {
   // Auto update every 30 seconds with slightly varying values
   const interval = setInterval(async () => {
     try {
-      const res = await axios.post('http://localhost:5000/api/green', {
+      const res = await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/green', {
         energyUsage: 2.4 + (Math.random() * 0.4 - 0.2),
         solarOutput: 142 + (Math.random() * 20 - 10),
         co2Emissions: 1.8 + (Math.random() * 0.3 - 0.15),
@@ -62,7 +62,7 @@ useEffect(() => {
 }, []);
   const fetchScore = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/green');
+      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/green');
       setScore(res.data);
     } catch (err) {
       console.error(err);
@@ -74,7 +74,7 @@ useEffect(() => {
   // const updateScore = async () => {
   //   setUpdating(true);
   //   try {
-  //     const res = await axios.post('http://localhost:5000/api/green', form);
+  //     const res = await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/green', form);
   //     setScore(res.data);
   //   } catch (err) {
   //     console.error(err);

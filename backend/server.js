@@ -28,15 +28,10 @@ app.use('/api/alerts', require('./routes/alerts'));
   mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
     console.log('✅ MongoDB Connected');
-    const Ward = require('./models/Ward');
-    const count = await Ward.countDocuments();
-    if (count === 0) {
-      console.log('🌱 Empty database - auto seeding...');
-      const seedDatabase = require('./seed');
-      await seedDatabase();
-    }else {
-  console.log('⚡ Already seeded');
-}
+    //const Ward = require('./models/Ward');
+    console.log('🌱 Running seed manually...');
+    const seedDatabase = require('./seed');
+    await seedDatabase();
   })
   .catch(err => console.log('❌ MongoDB Error:', err));
   

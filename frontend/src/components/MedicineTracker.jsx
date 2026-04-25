@@ -49,7 +49,7 @@ export default function MedicineTracker({ language }) {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/medicine');
+      const res = await axios.get('http://localhost:5000/api/medicine');
       setMedicines(res.data.medicines);
       setSummary(res.data.summary);
     } catch (err) {
@@ -63,7 +63,7 @@ export default function MedicineTracker({ language }) {
     if (!form.name || !form.quantity || !form.expiryDate || !form.ward) return;
     setAdding(true);
     try {
-      await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/medicine', {
+      await axios.post('http://localhost:5000/api/medicine', {
         ...form,
         quantity: parseInt(form.quantity),
         costPerUnit: parseFloat(form.costPerUnit) || 0,

@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Ward = require('../models/Ward');
+const axios = require('axios');
 
-// Calculate infection risk score for a ward
+// Calculate infection risk score for a ward (fallback)
 function calculateInfectionRisk(ward) {
   const occupancyScore = ward.occupancy * 0.30;
   const disinfectionHours = Math.abs(new Date() - new Date(ward.lastDisinfection)) / 36e5;
@@ -24,17 +25,61 @@ function calculateInfectionRisk(ward) {
 router.get('/', async (req, res) => {
   try {
     const wards = await Ward.find();
-    const result = wards.map(ward => ({
-      wardName: ward.name,
-      department: ward.department,
-      occupancy: ward.occupancy,
-      activeInfections: ward.activeInfections,
-      airQuality: ward.airQuality,
-      handHygiene: ward.handHygiene,
-      lastDisinfection: ward.lastDisinfection,
-      ...calculateInfectionRisk(ward)
-    }));
+    const result = [];
+
+    for (let ward of wards) {
+      try {
+        const hours =
+          Math.abs(new Date() - new Date(ward.lastDisinfection)) / 36e5;
+
+        // 🔥 ML CALL
+        const response = await axios.post(
+          'http://localhost:5001/predict/infection',
+          {
+            occupancy: ward.occupancy,
+            activeInfections: ward.activeInfections,
+            airQuality: ward.airQuality,
+            handHygiene: ward.handHygiene,
+            hoursSinceDisinfection: hours
+          }
+        );
+
+        result.push({
+          wardName: ward.name,
+          department: ward.department,
+          occupancy: ward.occupancy,
+          activeInfections: ward.activeInfections,
+          airQuality: ward.airQuality,
+          handHygiene: ward.handHygiene,
+          lastDisinfection: ward.lastDisinfection,
+          risk: response.data.risk,
+          score:
+            response.data.risk === "high" ? 80 :
+            response.data.risk === "medium" ? 50 : 20,
+          source: "ML"
+        });
+
+      } catch (err) {
+        console.log("ML failed, using fallback");
+
+        const fallback = calculateInfectionRisk(ward);
+
+        result.push({
+          wardName: ward.name,
+          department: ward.department,
+          occupancy: ward.occupancy,
+          activeInfections: ward.activeInfections,
+          airQuality: ward.airQuality,
+          handHygiene: ward.handHygiene,
+          lastDisinfection: ward.lastDisinfection,
+          ...fallback,
+          source: "fallback"
+        });
+      }
+    }
+
     res.json(result);
+
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }

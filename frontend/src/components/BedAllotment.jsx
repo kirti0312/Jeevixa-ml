@@ -44,7 +44,7 @@ export default function BedAllotment({ language }) {
 
   const fetchBeds = async () => {
     try {
-      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/beds');
+      const res = await axios.get('http://localhost:5000/api/beds');
       setBeds(res.data);
     } catch (err) { console.error(err); }
   };
@@ -65,12 +65,16 @@ export default function BedAllotment({ language }) {
       setError('Please fill patient name, age and condition');
       return;
     }
+    if (!/^\d{10}$/.test(form.phone)) {
+      setError('Phone number must be exactly 10 digits');
+      return;
+    }
     setLoading(true);
     setError('');
     setResult(null);
     try {
       // First assign bed
-const bedRes = await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/beds/allot', {
+const bedRes = await axios.post('http://localhost:5000/api/beds/allot', {
   patientName: form.name,
   condition: form.condition,
   severity: form.severity,
@@ -78,7 +82,7 @@ const bedRes = await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/b
 });
 
 // Then register patient with bed info
-await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/patients/register', {
+await axios.post('http://localhost:5000/api/patients/register', {
   ...form,
   age: parseInt(form.age),
   department: bedRes.data.assignedBed?.department || 'General',
@@ -214,7 +218,13 @@ await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/patients/registe
               <input
                 style={inputStyle} placeholder="Phone number"
                 value={form.phone}
-                onChange={e => setForm({ ...form, phone: e.target.value })}
+                // onChange={e => setForm({ ...form, phone: e.target.value })}
+                onChange={e => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setForm({ ...form, phone: value });
+                  }
+                }}
                 onFocus={e => { e.target.style.borderColor = '#C4956A'; e.target.style.boxShadow = '0 0 0 3px rgba(196,149,106,0.1)'; }}
                 onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
               />

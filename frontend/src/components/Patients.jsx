@@ -58,7 +58,7 @@ export default function Patients({ language }) {
 
   const fetchPatients = async () => {
     try {
-      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/patients');
+      const res = await axios.get('http://localhost:5000/api/patients');
       setPatients(res.data);
     } catch (err) {
       console.error(err);
@@ -71,7 +71,7 @@ export default function Patients({ language }) {
     if (!form.name || !form.age || !form.condition || !form.phone) return;
     setAdding(true);
     try {
-      await axios.post('https://jeevixa-backend-nm1z.onrender.com/api/patients/register', {
+      await axios.post('http://localhost:5000/api/patients/register', {
         ...form, age: parseInt(form.age),
       });
       setForm({
@@ -92,7 +92,7 @@ export default function Patients({ language }) {
   const handleDischarge = async (id) => {
     setDischarging(id);
     try {
-      await axios.put(`https://jeevixa-backend-nm1z.onrender.com/api/patients/${id}/discharge`);
+      await axios.put(`http://localhost:5000/api/patients/${id}/discharge`);
       fetchPatients();
       if (selected?._id === id) setSelected(null);
     } catch (err) {

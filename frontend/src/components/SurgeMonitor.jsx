@@ -57,7 +57,7 @@ export default function SurgeMonitor({ language }) {
 
   const fetchSurge = async () => {
     try {
-      const res = await axios.get('https://jeevixa-backend-nm1z.onrender.com/api/surge');
+      const res = await axios.get('http://localhost:5000/api/surge');
       setSurge(res.data);
     } catch (err) {
       console.error(err);

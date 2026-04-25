@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -20,6 +21,13 @@ const translations = {
 };
 
 export default function Dashboard({ user, language }) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+useEffect(() => {
+  const handleResize = () => setIsMobile(window.innerWidth <= 768);
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
   const t = translations[language] || translations.en;
   const [wards, setWards] = useState([]);
   const [patients, setPatients] = useState([]);
@@ -38,12 +46,12 @@ export default function Dashboard({ user, language }) {
   const fetchAll = async () => {
     try {
       const [wardsRes, patientsRes, staffRes, alertsRes, surgeRes, greenRes] = await Promise.all([
-        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/infection'),
-        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/patients'),
-        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/staff'),
-        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/alerts'),
-        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/surge'),
-        axios.get('https://jeevixa-backend-nm1z.onrender.com/api/green'),
+        axios.get('http://localhost:5000/api/infection'),
+        axios.get('http://localhost:5000/api/patients'),
+        axios.get('http://localhost:5000/api/staff'),
+        axios.get('http://localhost:5000/api/alerts'),
+        axios.get('http://localhost:5000/api/surge'),
+        axios.get('http://localhost:5000/api/green'),
       ]);
       setWards(wardsRes.data);
       setPatients(patientsRes.data.slice(0, 5));
@@ -161,7 +169,8 @@ export default function Dashboard({ user, language }) {
       {/* KPI Cards */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
+        //gridTemplateColumns: 'repeat(5, 1fr)',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(5, 1fr)',
         gap: '1rem', marginBottom: '1.5rem',
       }}>
         {kpis.map((kpi, i) => (
@@ -214,7 +223,9 @@ export default function Dashboard({ user, language }) {
 
       {/* Row 2 - Surge Chart + Alerts */}
       <div style={{
-        display: 'grid', gridTemplateColumns: '1.5fr 1fr',
+        display: 'grid',
+       //  gridTemplateColumns: '1.5fr 1fr',
+       gridTemplateColumns: isMobile ? '1fr' : '1.5fr 1fr',
         gap: '1.5rem', marginBottom: '1.5rem',
       }}>
 
@@ -297,7 +308,9 @@ export default function Dashboard({ user, language }) {
 
       {/* Row 3 - Patients + Staff */}
       <div style={{
-        display: 'grid', gridTemplateColumns: '1.5fr 1fr',
+        display: 'grid',
+        //  gridTemplateColumns: '1.5fr 1fr',
+        gridTemplateColumns: isMobile ? '1fr' : '1.5fr 1fr',
         gap: '1.5rem',
       }}>
 
